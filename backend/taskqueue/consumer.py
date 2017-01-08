@@ -28,7 +28,7 @@ def run_task_consumer(msg):
         task_context.save()
 
     try:
-        ret = task.func(*msg['parameters'])
+        ret = task.func(task_context, *msg['parameters'])
     except exceptions.CanceledError:
         logger.info('Cancelation while running task %i (%s)', msg['id'], msg['name'])
         with django.db.transaction.atomic():

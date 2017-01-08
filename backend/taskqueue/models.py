@@ -64,3 +64,9 @@ class TaskContext(models.Model):
         self.refresh()
         if self.cancel_signal:
             raise exceptions.CanceledError
+
+    def set_progress(self, value):
+        assert 0 <= value <= 100
+        with django.db.transaction.atomic():
+            self.progress = value
+            self.save()
