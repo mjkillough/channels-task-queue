@@ -5,5 +5,5 @@ import taskqueue
 
 
 @taskqueue.task()
-def dummy_task(self):
-    pass
+def dummy_task():
+    print('hi')

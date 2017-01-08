@@ -12,8 +12,6 @@ from .. import backends, decorator
 # of __name__.
 def dummy_func1(arg1, arg2):
     pass
-def dummy_func2(arg1, arg2, arg3):
-    pass
 
 
 # Wrap tests or classes with this to have a MagicMock for a Backend.

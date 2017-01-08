@@ -4,6 +4,9 @@
 import enum
 
 from django.db import models
+import django.db.transaction
+
+from . import exceptions
 
 
 def _enum_as_choices(enum):
@@ -20,6 +23,7 @@ class TaskContext(models.Model):
         'Queued',
         'Running',
         'Canceled',
+        'Failed',
         'Complete',
     ])
     status = models.IntegerField(choices=_enum_as_choices(TaskStatus))
@@ -45,3 +49,18 @@ class TaskContext(models.Model):
         """Gets the latest state for the task"""
         # Simple encapsulation around Django's model function.
         return self.refresh_from_db()
+
+    def cancel(self):
+        with django.db.transaction.atomic():
+            self.cancel_signal = True
+            self.save()
+
+    def throw_if_canceled(self):
+        """Raises `CanceledError` exception if the task has been canceled.
+
+        Expected to be called periodically from within tasks, which should allow
+        the error to propogate to the consumer/task runner.
+        """
+        self.refresh()
+        if self.cancel_signal:
+            raise exceptions.CanceledError
