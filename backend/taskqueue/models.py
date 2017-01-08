@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 import enum
+import json
 
 from django.db import models
 import django.db.transaction
@@ -44,6 +45,17 @@ class TaskContext(models.Model):
 
     # JSON serialized value (possibly null) returned by the task.
     result_json = models.TextField(default='null')
+
+    @property
+    def as_dict(self):
+        return dict(
+            id=self.id,
+            status=self.status,
+            status_string=self.TaskStatus(self.status).name, # XXX: I18N
+            parameters=json.loads(self.parameters_json),
+            progress=self.progress,
+            result=json.loads(self.result_json),
+        )
 
     def refresh(self):
         """Gets the latest state for the task"""
