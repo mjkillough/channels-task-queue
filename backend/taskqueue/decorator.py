@@ -6,13 +6,14 @@ from . import backends
 
 class Task:
 
-    def __init__(self, func)
+    def __init__(self, func):
         self.func = func
         self.name = func.__name__
         backends.backend.register_task(self)
 
     def call_async(self, *args):
         """Calls the wrapped Task asynchronously."""
+        # TODO: Check the arity of args matches the function, where we can?
         id = backends.backend.push_task(self, args)
         return backends.backend.context_for_task_id(id)
 
