@@ -18,3 +18,4 @@ class ConsumerTests(django.test.TestCase):
     # - The task correctly updated to 'Failed' if an exception is thrown in the task func.
     # - The task transitions to 'Complete' when the task func finished.
     # - The value returned from the task func is serialized as JSON on the TaskContext.
+    # - The task always has a progress of 100 when it completes.
