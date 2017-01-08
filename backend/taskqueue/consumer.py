@@ -39,7 +39,6 @@ def run_task_consumer(msg):
         logger.exception('Exception while running task %i (%s):', msg['id'], msg['name'])
         with django.db.transaction.atomic():
             task_context.status = task_context.TaskStatus.Failed
-            task_context.progress = 100
             task_context.save()
             return
 
@@ -47,6 +46,7 @@ def run_task_consumer(msg):
     with django.db.transaction.atomic():
         task_context.status = task_context.TaskStatus.Complete
         task_context.return_json = json.dumps(ret)
+        task_context.progress = 100
         task_context.save()
 
     logger.info('Task %i (%s) complete.', msg['id'], msg['name'])
