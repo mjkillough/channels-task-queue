@@ -1,10 +1,22 @@
 #!/usr/bin/env python
 
+import json
+
+import channels
+import django.db.transaction
+
 from . import models
 
 
 class Backend:
-    """Interface that all task-queue backends must implement."""
+    """Interface that all task-queue backends must implement.
+
+    This isn't quite as generic as I'd hoped it'd be. I was imagining we'd
+    expose a `pop_task()` that backends would need to implement. However, for
+    a Channels backend, we don't need it at all, as we can just rely on
+    Channel's built-in routing. Re-consider this interface if/when we come to
+    add another type of backend.
+    """
 
     def __init__(self):
         self.registry = {}
@@ -41,17 +53,7 @@ class Backend:
         :param params: A list of positional parameters to be passed to the task.
         :returns: An opaque identifier for the task.
         """
-        pass
-
-    def pop_task(self):
-        """Pops a (task, params) tuple from the task queue.
-
-        For internal use by the task worker.
-
-        :returns: A tuple of the task and its positional arguments.
-        :rtype: (`taskqueue.Task`, list)
-        """
-        pass
+        raise NotImplemented('Should be implemented by sub-class')
 
     def context_for_task_id(self, id):
         """Given a task's ID, returns its TaskContext.
@@ -60,12 +62,36 @@ class Backend:
         its status, progress, or result. Callers can use the
         `.refresh()` method on the returned model to get the latest state.
 
+        Sub-classes shouldn't need to implement this function.
+
         :param id: The ID of the task, as returned by `push_task`.
         :returns: The `TaskContext` model for the task.
         """
-        pass
+        return models.TaskContext.objects.get(id=id)
+
+
+class ChannelsBackend(Backend):
+
+    def __init__(self):
+        super()
+        self.channel = channels.Channel('taskqueue.queue')
+
+    def push_task(self, task, params):
+        with django.db.transaction.atomic():
+            task_context = models.TaskContext.objects.create(
+                status=models.TaskContext.TaskStatus.Queued,
+                parameters_json=json.dumps(params),
+            )
+
+        self.channel.send(dict(
+            id=task_context.id,
+            name=task.name,
+            parameters=params
+        ))
+
+        return task_context.id
 
 
 # The backend to be used by the application.
 # TODO: Instantiate this dynamically based on the Django app's settings.
-backend = Backend()
+backend = ChannelsBackend()

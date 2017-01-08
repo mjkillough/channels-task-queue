@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import json
+import unittest
+
 import django.test
 
-from .. import backends
+from .. import backends, models
 
 
 class DummyTask:
@@ -35,3 +38,30 @@ class BackendRegistryTests(django.test.TestCase):
         backend = backends.Backend()
         with self.assertRaises(KeyError):
             backend.get_task_by_name('task')
+
+
+class ChannelsBackendTests(django.test.TestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.backend = backends.ChannelsBackend()
+        self.channel = self.backend.channel = unittest.mock.Mock()
+
+    def test_push_task_sent_to_channel(self):
+        task = DummyTask('name')
+        id = self.backend.push_task(task, [1, 2])
+        self.channel.send.assert_called_once_with(dict(
+            id=id,
+            name=task.name,
+            parameters=[1, 2]
+        ))
+
+    def test_push_task_saved_to_db(self):
+        """Checks a TaskContext is created for the task and saved to the DB."""
+        task = DummyTask('name')
+        id = self.backend.push_task(task, [1, 2])
+        self.assertTrue(models.TaskContext.objects.filter(id=id).exists())
+
+        task_context = models.TaskContext.objects.get(id=id)
+        self.assertEqual(task_context.status, models.TaskContext.TaskStatus.Queued)
+        self.assertEqual(task_context.parameters_json, json.dumps([1, 2]))

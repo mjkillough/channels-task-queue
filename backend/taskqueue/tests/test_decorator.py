@@ -38,3 +38,4 @@ class TaskDecoratorTests(django.test.TestCase):
         task = decorator.task()(dummy_func1)
         with self.assertRaises(Exception):
             task.call_async(1, 2, 'too many args')
+

@@ -16,7 +16,7 @@ def _enum_as_choices(enum):
 
 class TaskContext(models.Model):
 
-    TaskStatus = enum.Enum('TaskStatus', [
+    TaskStatus = enum.IntEnum('TaskStatus', [
         'Queued',
         'Running',
         'Canceled',
@@ -31,15 +31,15 @@ class TaskContext(models.Model):
     parameters_json = models.TextField()
 
     # Task progress, stored as integer 0-100, unfortunately not a DB constraint.
-    progress = models.IntegerField()
+    progress = models.IntegerField(default=0)
 
     # Those outside the task can set this to signal to the task that it should
     # terminate early. (This field being set does not mean the task has been
     # terminated - see `status`).
-    cancel_signal = models.BooleanField()
+    cancel_signal = models.BooleanField(default=False)
 
     # JSON serialized value (possibly null) returned by the task.
-    result_json = models.TextField()
+    result_json = models.TextField(default='null')
 
     def refresh(self):
         """Gets the latest state for the task"""
