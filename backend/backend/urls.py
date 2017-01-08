@@ -2,8 +2,10 @@
 # encoding: utf-8
 
 from django.conf.urls import url
-from django.contrib import admin
+
+from . import views
 
 
 urlpatterns = [
+    url(r'^$', views.initiate_dummy_task)
 ]

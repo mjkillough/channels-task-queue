@@ -3,4 +3,6 @@
 
 
 def run_task_consumer(msg):
-    print(msg)
+    print(msg['id'])
+    print(msg['name'])
+    print(msg['parameters'])

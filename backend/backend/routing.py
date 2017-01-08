@@ -2,9 +2,9 @@
 
 from channels.routing import route
 
-from . import consumer
+import taskqueue
 
 
 channel_routing = [
-    route('taskqueue.queue', consumer.run_task_consumer),
+    route('taskqueue.queue', taskqueue.run_task_consumer),
 ]

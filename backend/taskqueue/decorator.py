@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from . import backends
 
 
 class Task:
@@ -9,11 +8,17 @@ class Task:
     def __init__(self, func):
         self.func = func
         self.name = func.__name__
+
+        # Late import because Django import order is stupid.
+        from . import backends
         backends.backend.register_task(self)
 
     def call_async(self, *args):
         """Calls the wrapped Task asynchronously."""
         # TODO: Check the arity of args matches the function, where we can?
+
+        # Late import because Django import order is stupid.
+        from . import backends
         id = backends.backend.push_task(self, args)
         return backends.backend.context_for_task_id(id)
 

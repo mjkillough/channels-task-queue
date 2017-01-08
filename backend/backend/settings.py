@@ -12,6 +12,8 @@ SECRET_KEY = 'wvjn$5d)k0&m@!qtiy-(+@y#d6x5&clxbe_e(xs8p665uq3($-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+STATIC_URL = '/static/'
+
 INSTALLED_APPS = [
     'channels',
 

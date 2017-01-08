@@ -73,7 +73,7 @@ class Backend:
 class ChannelsBackend(Backend):
 
     def __init__(self):
-        super()
+        super().__init__()
         self.channel = channels.Channel('taskqueue.queue')
 
     def push_task(self, task, params):
