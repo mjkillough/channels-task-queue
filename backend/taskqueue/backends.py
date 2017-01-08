@@ -93,5 +93,6 @@ class ChannelsBackend(Backend):
 
 
 # The backend to be used by the application.
-# TODO: Instantiate this dynamically based on the Django app's settings.
+# TODO: Instantiate this dynamically based on the Django app's settings. As we
+#       only have one backend type, this is fine.
 backend = ChannelsBackend()
