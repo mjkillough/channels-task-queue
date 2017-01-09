@@ -4,11 +4,16 @@
 import logging
 
 from django.http import JsonResponse, Http404
+from django.shortcuts import render_to_response
 
 import taskqueue
 import taskqueue.models
 
 from . import tasks
+
+
+def index(request):
+    return render_to_response('index.html')
 
 
 def start_dummy_task(request):

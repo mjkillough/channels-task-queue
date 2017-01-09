@@ -14,9 +14,17 @@ DEBUG = True
 
 STATIC_URL = '/static/'
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+    },
+]
+
 INSTALLED_APPS = [
     'channels',
 
+    'example',
     'taskqueue',
 ]
 
