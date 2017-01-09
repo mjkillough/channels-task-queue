@@ -20,9 +20,9 @@ INSTALLED_APPS = [
     'taskqueue',
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'example.urls'
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'example.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -34,7 +34,7 @@ DATABASES = {
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgiref.inmemory.ChannelLayer",
-        "ROUTING": "backend.routing.channel_routing",
+        "ROUTING": "example.routing.channel_routing",
     },
 }
 
