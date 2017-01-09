@@ -9,7 +9,7 @@ import taskqueue
 
 @taskqueue.task()
 def dummy_sleeping_task(task, total_time_in_seconds):
-    sleep_period = 2 # seconds
+    sleep_period = 0.1 # seconds
     total_sleep_ticks = math.ceil(total_time_in_seconds / sleep_period)
     for tick in range(total_sleep_ticks):
         # Check if we've been canceled. Will raise an exception if we have,
