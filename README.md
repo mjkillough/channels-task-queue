@@ -30,10 +30,9 @@ task_context.refresh()
 print(task_context.status)
 ```
 
-(This example is expanded upon in `backend/`).
+(This example is expanded upon in `example/`, including a simple UI to play around with our dummy task).
 
 Future work:
-- A simple front-end that utilises the views exposed in `backend/` to give an example of its usage.
 - Complete the tests. Some are stubbed-out as comments, others are missing entirely.
 - Address TODOs throughout the code.
 - Allow keyword arguments to be passed to tasks.
@@ -52,6 +51,8 @@ virtualenv venv
 pip install -r requirements.txt
 ```
 
+*Chrome 55 required*. (Edge might work). The front-end uses ES6/7 features which aren't available in all browsers. As this is just a simple example, the JS is not transpiled.
+
 
 ## Run
 
@@ -62,10 +63,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Then:
-- Visit http://localhost:8000/start/ - this will start a task and return an ID.
-- Visit http://localhost:8000/task/IDHERE/ - this will return task progress.
-- Visit http://localhost:8000/cancel/IDHERE/ - this will cancel a running task.
+Then browse to http://localhost:8000.
 
 
 ## Tests
