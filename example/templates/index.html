@@ -4,8 +4,27 @@
     <meta charset="UTF-8">
     <title>Example application for `taskqueue`</title>
 
+    <!-- Use unpkg.com package to use Vuejs developer tools -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- <script src="/static/js/vendor/vue-2.1.8.min.js"></script> -->
 </head>
 <body>
-    Hello, world!
+    <script type="text/x-template" id="tmpl-dummy-task-runner">
+        <div>
+            <button :disabled="havePendingTask" @click="startTask">Start Task</button>
+            <br/>
+            Debug information about current task:<br/>
+            <textarea v-model="task" cols=90 rows=20></textarea>
+        </div>
+    </script>
+
+    <div id='app-container'>
+        <dummy-task-runner></dummy-task-runner>
+    </div>
+
+    <script src="/static/js/dummy-task-runner.js"></script>
+    <script>
+        new Vue({ el: '#app-container' });
+    </script>
 </body>
 </html>
