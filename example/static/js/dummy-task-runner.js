@@ -21,6 +21,10 @@
                     !TASK_FINISHED_STATES.includes(this.task.status)
                 );
             },
+
+            progress: function() {
+                return this.task !== null ? this.task.progress : 0;
+            },
         },
 
         methods: {

@@ -7,12 +7,29 @@
     <!-- Use unpkg.com package to use Vuejs developer tools -->
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <!-- <script src="/static/js/vendor/vue-2.1.8.min.js"></script> -->
+
+    <style>
+        .progress-bar {
+            display: inline-block;
+        }
+
+        .progress-bar__track {
+            position: relative;
+            border: 1px solid black;
+            padding: 3px;
+        }
+
+        .progress-bar__value {
+            background-color: teal;
+        }
+    </style>
 </head>
 <body>
     {% verbatim %}
     <script type="text/x-template" id="tmpl-dummy-task-runner">
         <div>
             <button :disabled="havePendingTask" @click="startTask">Start Task</button>
+            <progress-bar :percent="progress" style="width: 200px"></progress-bar>
             <cancel-task-button :task="task"></cancel-task-button>
             <br/>
             Debug information about current task:<br/>
@@ -24,12 +41,25 @@
             {{ buttonText }}
         </button>
     </script>
+    <script type="text/x-template" id="tmpl-progress-bar">
+        <div class="progress-bar">
+            <div class="progress-bar__track">
+                <div
+                    class="progress-bar__value"
+                    :style="{ width: percent + '%' }"
+                >
+                    <span>{{ percent }}%</span>
+                </div>
+            </div>
+        </div>
+    </script>
     {% endverbatim %}
 
     <div id='app-container'>
         <dummy-task-runner></dummy-task-runner>
     </div>
 
+    <script src="/static/js/progress-bar.js"></script>
     <script src="/static/js/tasks.js"></script>
     <script src="/static/js/cancel-task-button.js"></script>
     <script src="/static/js/dummy-task-runner.js"></script>
