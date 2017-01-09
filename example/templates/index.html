@@ -9,19 +9,29 @@
     <!-- <script src="/static/js/vendor/vue-2.1.8.min.js"></script> -->
 </head>
 <body>
+    {% verbatim %}
     <script type="text/x-template" id="tmpl-dummy-task-runner">
         <div>
             <button :disabled="havePendingTask" @click="startTask">Start Task</button>
+            <cancel-task-button :task="task"></cancel-task-button>
             <br/>
             Debug information about current task:<br/>
             <textarea v-model="task" cols=90 rows=20></textarea>
         </div>
     </script>
+    <script type="text/x-template" id="tmpl-cancel-task-button">
+        <button :disabled="!canCancel" @click="cancel">
+            {{ buttonText }}
+        </button>
+    </script>
+    {% endverbatim %}
 
     <div id='app-container'>
         <dummy-task-runner></dummy-task-runner>
     </div>
 
+    <script src="/static/js/tasks.js"></script>
+    <script src="/static/js/cancel-task-button.js"></script>
     <script src="/static/js/dummy-task-runner.js"></script>
     <script>
         new Vue({ el: '#app-container' });

@@ -2,20 +2,6 @@
 
 (function() {
 
-    var TASK_STATUS = {
-        Queued: 1,
-        Running: 2,
-        Canceled: 3,
-        Failed: 4,
-        Complete: 5,
-    };
-
-    // States that indicate the task is running (or about to run) and its
-    // status may change.
-    var TASK_PENDING_STATES = [
-        TASK_STATUS.Queued, TASK_STATUS.Running,
-    ];
-
     // <dummy-task-runner> component, which allows a user to start our task,
     // watch its progress and cancel its execution.
     Vue.component('dummy-task-runner', {
@@ -32,7 +18,7 @@
             havePendingTask: function() {
                 return (
                     this.task !== null &&
-                    TASK_PENDING_STATES.includes(this.task.status)
+                    !TASK_FINISHED_STATES.includes(this.task.status)
                 );
             },
         },
