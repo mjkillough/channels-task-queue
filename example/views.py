@@ -30,7 +30,7 @@ def cancel_task(request, id):
     except taskqueue.models.TaskContext.DoesNotExist:
         raise Http404
     task_context.cancel()
-    return JsonResponse(dict(success=True))
+    return JsonResponse(dict(success=True, task=task_context))
 
 
 def task_info(request, id):

@@ -55,6 +55,7 @@ class TaskContext(models.Model):
             parameters=json.loads(self.parameters_json),
             progress=self.progress,
             result=json.loads(self.result_json),
+            canceling=self.cancel_signal,
         )
 
     def refresh(self):
