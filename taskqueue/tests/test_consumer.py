@@ -10,6 +10,7 @@ from .. import backends, consumer, models
 
 
 class ConsumerTests(django.test.TestCase):
+    pass
 
     # TODO: I've run out of time today. :) I would like tests to check:
 
